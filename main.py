@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 
 from calculator import Calculator
@@ -7,7 +8,12 @@ cal = Calculator(transportation="bus", distance=0.0)
 
 if __name__ == "__main__":
     # Create a title
-    st.title("CO2 Emission Calculator")
+    st.title("Simple CO2 Emission Calculator")
+
+    # Create a description
+    st.write(
+        "This is a simple calculator that calculates the CO2 emission of a trip based on the method of transportation and the distance of the travel."
+    )
 
     # Create selectors
     transportation_selector, distance_unit_selector, output_unit_selector = st.columns(
@@ -51,3 +57,13 @@ if __name__ == "__main__":
     # Auto calculate
     emission, result_unit = cal.calculate_emission()
     st.write("CO2 emmision of this trip is around: ", emission, result_unit)
+
+    # Show the data if needed (by using a checkbox)
+    st.subheader("Want to know how the emission is calculated?")
+    data = pd.DataFrame.from_dict(
+        cal.emission_data, columns=["CO2 Emission"], orient="index"
+    )
+    data.index.name = "Transportation Method"
+    if st.checkbox("Show the data"):
+        st.write("CO2 emission per km for each transportation method")
+        st.write(data)
