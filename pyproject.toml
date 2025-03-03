@@ -1,12 +1,22 @@
 [project]
 name = "co2-calculator-streamlit"
 version = "0.1.0"
-description = "Add your description here"
+description = "A simple CO2 emission calculator based on the Streamlit framework."
+authors = [
+    { name = "Yuchen Xue", email = "sean962081468@gmail.com" },
+]
 readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "Framework :: Streamlit :: 1.42",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development"
+]
 requires-python = ">=3.12"
 dependencies = [
     "streamlit>=1.42.2",
 ]
+urls = { repository = "https://github.com/yuchen-xue/Co2-Calculator-Streamlit" }
 
 [dependency-groups]
 dev = [
