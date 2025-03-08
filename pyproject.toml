@@ -22,6 +22,8 @@ urls = { repository = "https://github.com/yuchen-xue/Co2-Calculator-Streamlit" }
 
 [dependency-groups]
 dev = [
+    "mypy",
+    "pandas-stubs",
     "pytest",
     "ruff",
 ]

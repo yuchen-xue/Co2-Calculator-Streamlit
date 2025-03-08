@@ -1,13 +1,16 @@
-from collections.abc import KeysView
 from dataclasses import dataclass
 from math import ceil
 from pathlib import Path
 import tomllib
-from typing import ClassVar, Dict, Tuple
+from typing import ClassVar, Literal
 
 # Pre-loaded emission data
 PATH_EMISSION_TABLE = "emission-data.toml"
 
+# Type definitions
+DistanceUnit = Literal["km", "m"]
+OutputUnit = Literal["auto", "kg", "g"]
+EmissionMapping = dict[str, int | float]
 
 @dataclass
 class Calculator:
@@ -17,13 +20,13 @@ class Calculator:
     ouptput_unit: str = "auto"
 
     # A lookup table for emission data
-    _emission_data: ClassVar[Dict[str, int | float]] = None
+    _emission_data: ClassVar[EmissionMapping] = dict()
 
     # Supported units for distance input
-    _supported_distance_unit: ClassVar[Tuple[str]] = ("km", "m")
+    _supported_distance_unit: ClassVar[tuple[DistanceUnit, ...]] = ("km", "m")
 
     # Supported units for emission output
-    _supported_output_unit: ClassVar[Tuple[str]] = ("auto", "kg", "g")
+    _supported_output_unit: ClassVar[tuple[OutputUnit, ...]] = ("auto", "kg", "g")
 
     def __post_init__(self):
         """Load emission data and check if the input is valid"""
@@ -37,19 +40,19 @@ class Calculator:
         self._check_transportation()
 
     @property
-    def emission_data(self) -> KeysView:
+    def emission_data(self) -> EmissionMapping:
         return self._emission_data
 
     @property
-    def supported_distance_unit(self) -> Tuple[str]:
+    def supported_distance_unit(self) -> tuple[DistanceUnit, ...]:
         return self._supported_distance_unit
 
     @property
-    def supported_output_unit(self) -> Tuple[str]:
+    def supported_output_unit(self) -> tuple[OutputUnit, ...]:
         return self._supported_output_unit
 
     @staticmethod
-    def _load_emission_data(data_path: Path) -> float:
+    def _load_emission_data(data_path: Path) -> EmissionMapping:
         """Load emission data from file"""
         with data_path.open("rb") as f:
             return tomllib.load(f)
@@ -105,7 +108,7 @@ class Calculator:
         else:
             return round(n, decimals)
 
-    def calculate_emission(self) -> Tuple[float, str]:
+    def calculate_emission(self) -> tuple[float, str]:
         """Main calculation method. Return the carbon emission according to the unit given"""
         raw_result = self._calculate_raw_result()
 

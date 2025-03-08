@@ -22,11 +22,14 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
 
-      - name: Install the project
+      - name: Install the development dependencies
         run: uv sync --dev
 
-      - name: Check code quality
-        run: uv run ruff check --fix . tests
+      - name: Check linting and formatting
+        run: uv run ruff check
+
+      - name: Check types
+        run: uv run mypy .
 
       - name: Run tests
         run: uv run pytest
